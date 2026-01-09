@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { fileDB } from '../../lib/fileDB';
+import { supabaseDB } from '../../lib/supabaseDB';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
   const { userid } = req.headers;
 
@@ -9,23 +9,28 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).json({ error: 'User ID required in headers' });
   }
 
-  switch (method) {
-    case 'GET':
-      const clientInfo = fileDB.getClientInfo(userid as string);
-      return res.status(200).json({ clientInfo });
+  try {
+    switch (method) {
+      case 'GET':
+        const clientInfo = await supabaseDB.getClientInfo(userid as string);
+        return res.status(200).json({ clientInfo });
 
-    case 'PUT':
-      const { sessionsLeft } = req.body;
-      
-      if (typeof sessionsLeft !== 'number') {
-        return res.status(400).json({ error: 'Sessions count must be a number' });
-      }
+      case 'PUT':
+        const { sessions_left } = req.body;
+        
+        if (typeof sessions_left !== 'number') {
+          return res.status(400).json({ error: 'Sessions count must be a number' });
+        }
 
-      const updatedClient = fileDB.updateClientInfo(userid as string, { sessionsLeft });
-      return res.status(200).json({ clientInfo: updatedClient });
+        const updatedClient = await supabaseDB.updateClientInfo(userid as string, { sessions_left });
+        return res.status(200).json({ clientInfo: updatedClient });
 
-    default:
-      res.setHeader('Allow', ['GET', 'PUT']);
-      return res.status(405).end(`Method ${method} Not Allowed`);
+      default:
+        res.setHeader('Allow', ['GET', 'PUT']);
+        return res.status(405).end(`Method ${method} Not Allowed`);
+    }
+  } catch (error) {
+    console.error('Client API Error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }
