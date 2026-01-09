@@ -60,14 +60,4 @@ interface ClientInfo {
   sessionsLeft: number;
   expiryDate: string;
 }
-```
-
-projectname:manas-singh19's Project
-
-dbpass: kejda6-bymtog-vabjeJ
-
-Priject url:
-https://tcwefadrgpxthqgwldck.supabase.co
-
-anon public key: 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjd2VmYWRyZ3B4dGhxZ3dsZGNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5NDU5ODAsImV4cCI6MjA4MzUyMTk4MH0.spybIaXD0T1kX_4MYyqExM-PYQMnvnEkn9m8f0-lJe0
+``` 
